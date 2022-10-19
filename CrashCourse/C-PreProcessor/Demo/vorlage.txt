@@ -1,0 +1,6 @@
+#define NAME    Riechsalz
+#define ANREDE  Sehr geehrte Frau
+
+#define GRUSS   Hochachtungsvoll
+#define SIG     Franz Regensburger
+#define LZ  

@@ -1,0 +1,21 @@
+// Demonstriert Probleme, falls mehrfaches Inkludieren nicht verhindert wird
+// durch #ifndef ...
+//
+// Moegliche Probleme
+// CPP-Ebene
+// 1) Warnungen bei erneuter Definition von Makros
+// 2) Fehler bei Rekursion
+//
+// C-Ebene
+// 3) Fehler bei mehrfacher Definition von Variablen und Funktionen
+//
+
+#define A blau
+
+int x;
+
+#include "redefine_step2.txt"
+
+// Hier Rekursion
+//#include "redefine_step1.txt"
+

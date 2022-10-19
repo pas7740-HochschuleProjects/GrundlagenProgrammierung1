@@ -1,0 +1,3 @@
+#define NAME Hase
+#define AUFGABE dumme Sprueche
+Mein Name ist NAME und ich mache AUFGABE

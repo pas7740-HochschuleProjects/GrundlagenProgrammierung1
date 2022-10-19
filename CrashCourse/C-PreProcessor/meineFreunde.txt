@@ -1,0 +1,10 @@
+==============================================
+Das ist die Liste meiner besten Freunde:
+ 
+#include "popeye.txt"
+
+#include "bugsbunny.txt"
+
+#include "bugsbunny.txt"
+
+#include "popeye.txt"

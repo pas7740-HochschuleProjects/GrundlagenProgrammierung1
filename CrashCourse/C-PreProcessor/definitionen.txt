@@ -1,0 +1,6 @@
+#ifndef _DEFINITIONEN
+#define _DEFINITIONEN
+#define KOPFZEILE ==================================================
+#define TRENNER   --------------------------------------------------
+#define ENDE      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#endif

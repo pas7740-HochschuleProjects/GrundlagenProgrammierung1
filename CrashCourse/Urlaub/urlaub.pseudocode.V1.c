@@ -1,0 +1,4 @@
+{
+    Urlaub planen;
+    Urlaub antreten;
+}

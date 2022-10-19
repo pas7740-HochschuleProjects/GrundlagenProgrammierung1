@@ -1,0 +1,74 @@
+#
+# Docu zu gdb gibt es in
+# Moodle: Manuale/gdb.pdf
+
+$ gdbtui -q bin/arraySum
+
+# --------------------------------------------------------
+
+break main
+winheight src 14
+
+run
+
+# mit 'next' bis zu sum=0 vorwärts
+
+next
+
+# --------------------------------------------------------
+# Speicher begutachten
+
+p values
+$1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+p values[4]
+$2 = 5
+
+# Ändern!
+
+p values[4] = 0x11223344 
+$3 = 287454020
+
+# Anzeige dezimal
+
+p values
+
+$4 = {1, 2, 3, 4, 287454020, 6, 7, 8, 9, 10}
+
+# Anzeige hexadezimal
+
+p /x values
+
+$5 = {0x1, 0x2, 0x3, 0x4, 0x11223344, 0x6, 0x7, 0x8, 0x9, 0xa}
+
+# Dump Speicher, wortweise (4 Byte sind ein Wort)
+# Der Debugger löst die Endianess auf (zeigt sie nicht an)
+
+x /10xw values
+
+0x7fffffffdd40: 0x00000001      0x00000002      0x00000003      0x00000004
+0x7fffffffdd50: 0x11223344      0x00000006      0x00000007      0x00000008
+0x7fffffffdd60: 0x00000009      0x0000000a
+
+# Dump Speicher, byte-weise (4 Byte sind ein Wort)
+# Nur so sehen wir den tatsächlichen Speicherinhalt
+
+x /40xb values
+
+0x7fffffffdd40: 0x01    0x00    0x00    0x00    0x02    0x00    0x00    0x00
+0x7fffffffdd48: 0x03    0x00    0x00    0x00    0x04    0x00    0x00    0x00
+0x7fffffffdd50: 0x44    0x33    0x22    0x11    0x06    0x00    0x00    0x00
+0x7fffffffdd58: 0x07    0x00    0x00    0x00    0x08    0x00    0x00    0x00
+0x7fffffffdd60: 0x09    0x00    0x00    0x00    0x0a    0x00    0x00    0x00
+
+# GDB verlassen
+
+Strg-D
+
+#
+# Standardeinstellungen in
+# ~/.gdbinit und ./.gdbinit
+#
+# Trick mit symbolischem Link
+# ln -s dot.gdbinit .gdbinit
+ 

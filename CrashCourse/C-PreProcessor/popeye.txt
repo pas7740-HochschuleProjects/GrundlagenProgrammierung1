@@ -1,0 +1,10 @@
+#ifndef _POPEYE
+#define _POPEYE
+#undef  NAME
+#undef  HOBBIES
+#undef  LIEBSPEISE
+#define NAME Popeye
+#define HOBBIES Olivia retten und draufhauen
+#define LIEBSPEISE Spinat
+#include "steckbrief.txt"
+#endif

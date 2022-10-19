@@ -1,0 +1,105 @@
+# set_bfp:
+# Definiere den Basiszeiger auf das erste interessierende Stack-Frame.
+# Diese Funktion erst aufrufen, wenn das Programm laueft!
+# Bei Aufruf in Breakpoint in main wird der Frame-Pointer der main-Funktion
+# gesetzt.
+
+define set_bfp
+	set $_bfp = $fp
+end
+
+# stack_all32
+# Den kompletten Stack von $sp bis $_bfp ausgeben und dabei
+# die Frame-Pointer hervorheben.
+# Wir nehmen eine 32Bit-Architektur an!
+# Voraussetzung: $_bfp wurde mittels set_bfp definiert.
+#
+# Note: direct nach call-Befel ist $fp != $ebp !!!
+#       Erst nach Assemblerbefehlen
+#	push   ebp
+#	mov    ebp,esp
+# stimmt es wieder. Bug oder Feature des GDB?
+#
+define stack_all32
+	init-if-undefined $_bfp = -1
+
+	if ($_bfp == -1 )
+		printf "Fehler: bitte erst 'set_bfp' aufrufen!\n"
+		printf "\nDazu muss aber das Programm ausgefuehrt werden.\n"
+		printf "Also z.B. 'break main' und dann 'run'\n"
+	else
+		set $_c = ($_bfp - $sp) / sizeof(unsigned int)
+		set $_cur_fp = $fp
+		set $_fc = 0
+		printf "-----------\n"
+		while ($_c >= 0)
+			set $_addr = (unsigned int*)$_bfp - $_c
+			printf "%p: 0x%08x", \
+				$_addr, \
+				*$_addr
+			if ($_cur_fp == $_addr)
+				printf " <--- fp %d\n",$_fc
+				# follow pointer to next frame
+				set $_fc++
+				set $_cur_fp = *(unsigned int*)$_cur_fp
+			else
+				printf "\n"
+			end
+			set $_c--
+		end
+		printf "-----------\n"
+	end
+end
+
+# Die nachfolgenden Funktionen sind aus
+# 	http://www.uninformativ.de/?ndo=single&newsid=173
+# und standen Pate fuer die Funktionen oben
+
+define stackb
+	printf "-----------\n"
+	set $_c = $fp - $sp
+	while ($_c > 0)
+		printf "%p: 0x%02x\n", \
+			(unsigned char*)($fp - $_c), \
+			*(unsigned char*)($fp - $_c)
+		set $_c--
+	end
+	printf "-----------\n"
+end
+
+define stackw
+	printf "-----------\n"
+	set $_c = ($fp - $sp) / sizeof(unsigned int)
+	while ($_c > 0)
+		printf "%p: 0x%08x\n", \
+			((unsigned int*)$fp - $_c), \
+			*((unsigned int*)$fp - $_c)
+		set $_c--
+	end
+	printf "-----------\n"
+end
+
+define stacks
+	printf "-----------\n"
+	set $_c = ($fp - $sp) / sizeof(unsigned short int)
+	while ($_c > 0)
+		printf "%p: 0x%04x\n", \
+			((unsigned short int*)$fp - $_c), \
+			*((unsigned short int*)$fp - $_c)
+		set $_c--
+	end
+	printf "-----------\n"
+end
+
+define stackg
+	printf "-----------\n"
+	set $_c = ($fp - $sp) / sizeof(unsigned long long int)
+	while ($_c > 0)
+		printf "%p: 0x%016llx\n", \
+			((unsigned long long int*)$fp - $_c), \
+			*((unsigned long long int*)$fp - $_c)
+		set $_c--
+	end
+	printf "-----------\n"
+end
+

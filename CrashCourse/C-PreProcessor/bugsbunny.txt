@@ -1,0 +1,10 @@
+#ifndef _BBUNY
+#define _BBUNY
+#undef  NAME
+#undef  HOBBIES
+#undef  LIEBSPEISE
+#define NAME Hase
+#define HOBBIES dumme Sprueche machen
+#define LIEBSPEISE Karotten
+#include "steckbrief.txt"
+#endif

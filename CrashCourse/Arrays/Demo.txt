@@ -1,0 +1,127 @@
+#
+# Docu zu gdb gibt es in
+# Moodle: Manuale/gdb.pdf
+
+$ gdbtui bin/arraySum
+
+# --------------------------------------------------------
+
+break main
+winheight src 14
+
+run
+
+# mit 'next' bis zu sum=0 vorwärts
+
+next
+
+# --------------------------------------------------------
+# Speicher begutachten
+
+p values
+$1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+p values[4]
+$2 = 5
+
+# Ändern!
+
+p values[4] = 0
+$3 = 0
+
+p values
+$4 = {1, 2, 3, 4, 0, 6, 7, 8, 9, 10}
+
+# Dump Speicher
+# Achtung:
+# Im Debugger muss man &values nutzen, um die Startadresse
+# des Arrays zu erfahren.
+# Ansonsten druckt der gdb das ganze Array aus, siehe oben.
+
+p &values
+$5 = (int (*)[10]) 0xbffff870
+
+# x /10dw values geht auch
+
+x /10dw &values
+
+0xbffff870:     1       2       3       4
+0xbffff880:     0       6       7       8
+0xbffff890:     9       10
+
+x /10xw &values
+
+0xbffff870:     0x00000001      0x00000002      0x00000003      0x00000004
+0xbffff880:     0x00000000      0x00000006      0x00000007      0x00000008
+0xbffff890:     0x00000009      0x0000000a
+
+#----------------------------
+# Ausführen: mehrmals 'next' bis fertig
+
+run
+
+# iteriere
+next
+
+p i
+p sum
+
+# --- auto display
+
+display i
+display sum
+next
+
+# Spezielle formatiert
+# display /format expr
+
+display /x i
+display /o i
+next
+
+# auto display löschen
+# undisplay dnums
+
+undisplay 2 3
+next
+
+# TUI-Layout bereinigen (wegen printf etc.)
+# Strg-L
+
+#----
+
+set disassembly-flavor intel
+
+# TUI-mode verlassen/betreten (toggle)
+# Via 'Strg-X a'
+
+disass /m main
+
+#----
+# Mit Ansicht asm debuggen im TUI-Mode
+# TUI-mode betreten (toggle)
+# Via 'Strg-X a'
+
+layout asm
+
+run
+
+# iteriere
+stepi
+
+# ausführen bis zum Schluss
+
+cont
+
+# GDB verlassen
+
+Strg-D
+
+#
+# Standardeinstellungen in
+# ~/.gdbinit und ./.gdbinit
+#
+# Trick mit symbolischem Link
+# ln -s dot.gdbinit .gdbinit
+ 
+

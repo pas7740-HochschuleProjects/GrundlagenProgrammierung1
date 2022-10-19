@@ -1,0 +1,40 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Run Makefile",
+            "command": "/usr/bin/make",
+            "args": [
+                "-f",
+                "Makefile"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "presentation": {
+                "focus": true
+            },
+            "label": "Execute binary of active file",
+            "command": "cd ${fileDirname} && ./bin/${fileBasenameNoExtension}",    // Adapt for your project
+            "args": [],                                         // Adapt for your project
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": []
+        }
+
+    ]
+}

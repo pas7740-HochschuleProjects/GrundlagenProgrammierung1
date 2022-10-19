@@ -1,0 +1,31 @@
+$ make clean; make
+
+$ gdbtui -q bin/euklid
+
+(gdb) break main
+
+#---- Anzeige Assembler in AT&T-Format
+
+(gdb) layout asm
+
+# --- Umstellen auf Intel-Format (siehe RA)
+
+(gdb) layout src
+(gdb) set disassembly-flavor intel
+(gdb) layout asm
+
+(gdb) run
+(gdb) si
+
+
+#---- memory dump
+
+/x 32xb main
+
+#---- disassemble: raw format
+
+disass /r main
+
+#---- disassemble: mit C-Code
+
+disass /m main

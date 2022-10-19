@@ -1,0 +1,33 @@
+Spass mit dem C-Praeprozessor
+-----------------------------
+
+Author: FABR
+
+Beispiele:
+
+# Beispiel 1: Den Praeprozessor aufrufen
+
+cpp hase.txt
+
+# Beispiel 2: Option -P unterdrueckt Kommentare des cpp
+
+cpp -P hase.txt
+
+# Beispiel 3: leere Zeilen in der Ausgabe loeschen
+# Auftritt der Shell-Pipes und des Stream-Editors sed
+
+cpp -P hase.txt | sed '/^\s*$/d'
+
+# Beispiel 4: #include, #ifdef, #endif
+
+cpp -P bugsbunny.txt
+cpp -P popeye.txt
+
+# Beispiel 5: Verhinderung von mehrfacher Einbindung durch #include
+
+cpp -P meineFreunde.txt
+
+
+Hinweis:
+manche Leute verwenden den Praeprozessor auch fuer die C-Programmierung
+

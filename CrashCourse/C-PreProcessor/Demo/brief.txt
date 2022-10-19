@@ -1,0 +1,9 @@
+#include "vorlage.txt"
+ANREDE NAME,
+
+es ist mir ein Vergnügen, einen Brief an Sie zu schreiben.
+
+LZ
+GRUSS,
+LZ
+SIG
