@@ -1,3 +1,3 @@
 myname:
 	mkdir -p bin
-	gcc -p -o bin/myname.o myname.c
+	gcc -g -Wall -o bin/myname.o myname.c
