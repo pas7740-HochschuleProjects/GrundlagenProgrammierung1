@@ -26,23 +26,31 @@ enum ResCodes{
   RES_FAILED
 };
 
+// Codes for the array of positions
+// Unused element in the worm arrays of positions
+#define UNUSED_POS_ELEM -1
+
 // Dimensions and bounds
 #define NAP_TIME    100   // Time in milliseconds to sleep between updates of display
 #define MIN_NUMBER_OF_ROWS  3   // The guaranteed number of rows available for the board
 #define MIN_NUMBER_OF_COLS 10   // The guaranteed number of columns available for the board
+#define WORM_LENGTH 20    //Maximal length of the worm
 
 // Numbers for color pairs used by curses macro COLOR_PAIR
 enum ColorPairs{
   COLP_USER_WORM = 1,
+  COLP_FREE_CELL,
 };
 // Symbols to display
 #define SYMBOL_WORM_INNER_ELEMENT '0'
+#define SYMBOL_FREE_CELL ' '
 
 // Game state codes
 enum GameStates{
   WORM_GAME_ONGOING,
   WORM_OUT_OF_BOUNDS,   //Left screen
   WORM_GAME_QUIT,       //User likes to quit
+  WORM_CROSSING,        //Worm head crossed another worm element
 };
 
 // Directions for the worm
@@ -58,8 +66,16 @@ enum WormHeading{
 // ********************************************************************************************
 
 // Data defining the worm
-int theworm_headpos_y;  // y-coordinate of the worm's head
-int theworm_headpos_x;  // x-coordinate of the worm's head
+// Array of positions for worm elements
+int theworm_wormpos_y[WORM_LENGTH];
+// Array of x positions for worm elements
+int theworm_wormpos_x[WORM_LENGTH];
+// Last usable index into the arrays
+// theworm_wormpos_y and theworm_wormpos_x
+int theworm_maxindex;
+// An index intro the array for the worm's head position
+// O <= theworm_headindex <= theworm_maxindex
+int theworm_headindex;
 
 // The current heading of the worm
 // These are offsets from the set {-1,0,+1}
@@ -90,10 +106,12 @@ int getLastRow();
 int getLastCol();
 
 // Functions concerning the management of the worm data
-enum ResCodes initializeWorm(int headpos_y, int headpos_x, enum WormHeading dir, enum ColorPairs color);
+enum ResCodes initializeWorm(int len_max, int headpos_y, int headpos_x, enum WormHeading dir, enum ColorPairs color);
 void showWorm();
 void moveWorm(enum GameStates* agame_state);
 void setWormHeading(enum WormHeading dir);
+void cleanWormTail();
+bool isInUseByWorm(int new_headpos_y, int new_headpos_x);
 
 // ********************************************************************************************
 // Functions
@@ -108,6 +126,7 @@ void initializeColors() {
     // Define colors of the game
     start_color();
     init_pair(COLP_USER_WORM,     COLOR_GREEN,    COLOR_BLACK);
+    init_pair(COLP_FREE_CELL,     COLOR_BLACK,    COLOR_BLACK);
 }
 
 void readUserInput(enum GameStates* agame_state ) {
@@ -159,7 +178,7 @@ enum ResCodes doLevel() {
     bottomLeft_y =  getLastRow();
     bottomLeft_x =  0;
 
-    res_code = initializeWorm(bottomLeft_y, bottomLeft_x , WORM_RIGHT, COLP_USER_WORM);
+    res_code = initializeWorm(WORM_LENGTH, bottomLeft_y, bottomLeft_x , WORM_RIGHT, COLP_USER_WORM);
     if ( res_code != RES_OK) {
         return res_code;
     }
@@ -181,6 +200,8 @@ enum ResCodes doLevel() {
         }
 
         // Process userworm
+        // Clean the tail of the worm
+        cleanWormTail();
         // Now move the worm for one step
         moveWorm(&game_state);
         // Bail out of the loop if something bad happened
@@ -277,10 +298,22 @@ int getLastCol() {
 // The following functions all depend on the model of the worm
 
 // Initialize the worm
-enum ResCodes initializeWorm(int headpos_y, int headpos_x, enum WormHeading dir, enum ColorPairs color) {
+enum ResCodes initializeWorm(int len_max, int headpos_y, int headpos_x, enum WormHeading dir, enum ColorPairs color) {
+    // Local variables for loops etc.
+
+    // Initialize last usable index to len_max -1
+    theworm_maxindex = len_max-1;
+    theworm_headindex = 0;
+
+    // Mark all elements as unused
+    for(int i = 0; i < len_max; i++){
+      theworm_wormpos_x[i] = UNUSED_POS_ELEM;
+      theworm_wormpos_y[i] = UNUSED_POS_ELEM;
+    }
+
     // Initialize position of worms head
-    theworm_headpos_y = headpos_y;
-    theworm_headpos_x = headpos_x;
+    theworm_wormpos_x[theworm_headindex] = headpos_x;
+    theworm_wormpos_y[theworm_headindex] = headpos_y;
 
     // Initialize the heading of the worm
     setWormHeading(dir);
@@ -297,31 +330,70 @@ void showWorm() {
     // Due to our encoding we just need to show the head element
     // All other elements are already displayed
     placeItem(
-            theworm_headpos_y ,
-            theworm_headpos_x ,
+            theworm_wormpos_y[theworm_headindex] ,
+            theworm_wormpos_x[theworm_headindex] ,
             SYMBOL_WORM_INNER_ELEMENT, theworm_wcolor);
 }
 
+void cleanWormTail(){    
+    int tailIndex;
+    // Compute TailIndex
+    tailIndex = (theworm_headindex + 1) % WORM_LENGTH;
+    // Check the array of worm elements
+    if(theworm_wormpos_x[tailIndex] == UNUSED_POS_ELEM && theworm_wormpos_y[tailIndex] == UNUSED_POS_ELEM){
+      placeItem(theworm_wormpos_y[tailIndex], theworm_wormpos_x[tailIndex], SYMBOL_FREE_CELL, COLP_FREE_CELL);
+    }
+}
+
+bool isInUseByWorm(int new_headpos_y, int new_headpos_x){
+    for(int i = 0; i < WORM_LENGTH; i++){
+      if(i != theworm_headindex){
+        if(theworm_wormpos_x[i] == new_headpos_x && theworm_wormpos_y[i] == new_headpos_y){
+          return true;
+        }
+      }
+    }
+    return false;
+}
+
 void moveWorm(enum GameStates* agame_state) {
+    int headpos_x, headpos_y;
+  
     // Compute and store new head position according to current heading.
-    theworm_headpos_y += theworm_dy;
-    theworm_headpos_x += theworm_dx;
+    headpos_y = theworm_wormpos_y[theworm_headindex]+theworm_dy;
+    headpos_x = theworm_wormpos_x[theworm_headindex]+theworm_dx;
 
     // Check if we would leave the display if we move the worm's head according
     // to worm's last direction.
     // We are not allowed to leave the display's window.
-    if (theworm_headpos_x < 0) {
+    if (headpos_x < 0) {
         *agame_state = WORM_OUT_OF_BOUNDS;
-    } else if (theworm_headpos_x > getLastCol() ) { 
+    } else if (headpos_x > getLastCol() ) { 
         *agame_state = WORM_OUT_OF_BOUNDS;
-    } else if (theworm_headpos_y < 0) {  
+    } else if (headpos_y < 0) {  
         *agame_state = WORM_OUT_OF_BOUNDS;
-    } else if (theworm_headpos_y > getLastRow() ) {
+    } else if (headpos_y > getLastRow() ) {
         *agame_state = WORM_OUT_OF_BOUNDS;
     } else {
         // We will stay within bounds.
-        // So all is well
-        // Do nothing
+        //Check if the worm's head will collide with itself at the new position
+        if (isInUseByWorm(headpos_y, headpos_x)){
+            //That's bad: stop game
+            *agame_state = WORM_CROSSING;  
+        }
+    }
+
+    //Check the status of *agame_state
+    //Go on if nothing bad happend
+    if (*agame_state == WORM_GAME_ONGOING){
+      //Increment the worm_headindex
+      //Ring Buffer
+      if(theworm_headindex+1 > theworm_maxindex){
+        theworm_headindex = 0;
+      }
+      //Store new coordinates of head element in worm structure
+      theworm_wormpos_x[theworm_headindex] = headpos_x;
+      theworm_wormpos_y[theworm_headindex] = headpos_y;
     }
 }
 
