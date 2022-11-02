@@ -1,0 +1,5 @@
+New in this version
+
+- Introduction of a worm that can be moved around on the display by the user
+  The worm is endless and may cross itsself.
+  However, the worm is not allowed to leave the display
