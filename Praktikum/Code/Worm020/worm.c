@@ -340,7 +340,7 @@ void cleanWormTail(){
     // Compute TailIndex
     tailIndex = (theworm_headindex + 1) % WORM_LENGTH;
     // Check the array of worm elements
-    if(theworm_wormpos_x[tailIndex] == UNUSED_POS_ELEM && theworm_wormpos_y[tailIndex] == UNUSED_POS_ELEM){
+    if(isInUseByWorm(theworm_wormpos_y[tailIndex], theworm_wormpos_x[tailIndex])){
       placeItem(theworm_wormpos_y[tailIndex], theworm_wormpos_x[tailIndex], SYMBOL_FREE_CELL, COLP_FREE_CELL);
     }
 }
@@ -348,7 +348,7 @@ void cleanWormTail(){
 bool isInUseByWorm(int new_headpos_y, int new_headpos_x){
     for(int i = 0; i < WORM_LENGTH; i++){
       if(i != theworm_headindex){
-        if(theworm_wormpos_x[i] == new_headpos_x && theworm_wormpos_y[i] == new_headpos_y){
+        if(new_headpos_x == theworm_wormpos_x[i] && new_headpos_y == theworm_wormpos_y[i] && new_headpos_x != -1 && new_headpos_y != -1){
           return true;
         }
       }
@@ -390,6 +390,8 @@ void moveWorm(enum GameStates* agame_state) {
       //Ring Buffer
       if(theworm_headindex+1 > theworm_maxindex){
         theworm_headindex = 0;
+      }else{
+        theworm_headindex++;
       }
       //Store new coordinates of head element in worm structure
       theworm_wormpos_x[theworm_headindex] = headpos_x;
