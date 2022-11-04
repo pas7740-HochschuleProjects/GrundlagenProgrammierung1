@@ -14,7 +14,8 @@
 // Result codes of functions
 enum ResCodes{
   RES_OK,
-  RES_FAILED
+  RES_FAILED,
+  RES_INTERNAL_ERROR,
 };
 
 // Codes for the array of positions
@@ -25,16 +26,20 @@ enum ResCodes{
 #define NAP_TIME    100   // Time in milliseconds to sleep between updates of display
 #define MIN_NUMBER_OF_ROWS  3   // The guaranteed number of rows available for the board
 #define MIN_NUMBER_OF_COLS 10   // The guaranteed number of columns available for the board
+#define ROWS_RESERVED 4   //Lines reserved for the message area
 #define WORM_LENGTH 20    //Maximal length of the worm
 
 // Numbers for color pairs used by curses macro COLOR_PAIR
 enum ColorPairs{
   COLP_USER_WORM = 1,
   COLP_FREE_CELL,
+  COLP_BARRIER,
 };
+
 // Symbols to display
 #define SYMBOL_WORM_INNER_ELEMENT '0'
 #define SYMBOL_FREE_CELL ' '
+#define SYMBOL_BARRIER '#'
 
 // Game state codes
 enum GameStates{

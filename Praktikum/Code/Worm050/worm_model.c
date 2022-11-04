@@ -140,4 +140,10 @@ void setWormHeading(struct worm* aworm, enum WormHeading dir) {
             aworm->dy=0;
             break;
     }
-} 
+}
+
+// Getters
+
+struct pos getWormHeadPos(struct worm* aworm){
+  return aworm->wormpos[aworm->headindex];
+}

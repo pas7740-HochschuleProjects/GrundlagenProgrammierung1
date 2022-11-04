@@ -44,5 +44,6 @@ extern void moveWorm(struct worm* aworm, enum GameStates* agame_state);
 extern void setWormHeading(struct worm* aworm, enum WormHeading dir);
 extern void cleanWormTail(struct worm* aworm);
 extern bool isInUseByWorm(struct worm* aworm, struct pos new_headpos);
+extern struct pos getWormHeadPos(struct worm* aworm);
 
 #endif  // #define _WORM_MODEL_H
