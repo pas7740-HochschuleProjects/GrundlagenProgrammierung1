@@ -1,0 +1,8 @@
+Usage:
+Während der Laufzeit werden folgende Tasten speziell behandelt:
+
+Richtungstasten (Pfeiltasten): steuern den Wurm des Benutzers
+q: beendet das Spiel
+s: schaltet Single Step ein
+Leertaste: schalte Single Step aus
+
