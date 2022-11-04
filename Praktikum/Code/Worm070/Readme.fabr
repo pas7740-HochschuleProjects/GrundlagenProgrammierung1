@@ -1,0 +1,12 @@
+New in this version
+
+board_model.c:
+- Introduction of a board structure for detection of collisions
+    * with barriers
+    * with the worm itself
+- Introduction of food items
+- Intro of a level with barriers (fixed, not from file)
+
+worm_model.c:
+- Worm is growing
+- Enhanced display of Worm (different symbols for head, inner and tail elements)

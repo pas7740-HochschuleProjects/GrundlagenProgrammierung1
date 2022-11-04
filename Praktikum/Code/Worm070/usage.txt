@@ -1,0 +1,9 @@
+Usage:
+Waehrend der Laufzeit werden folgende Tasten speziell behandelt:
+
+Richtungstasten (Pfeiltasten): steuern den Wurm des Benutzers
+q: beendet das Spiel
+g: fuer DEBUG: Wurm waechst, als wenn er einen Futterbrocken der
+   Kategorie 3 gefressen haette.
+s: schaltet Single Step ein
+Leertaste: schalte Single Step aus
