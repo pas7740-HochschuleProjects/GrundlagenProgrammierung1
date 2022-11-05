@@ -182,6 +182,7 @@ enum ResCodes doLevel() {
         break;
       case WORM_CRASH:
         showDialog("Sie haben das Spiel verloren, weil Sie in die Barriere gefahren sind", "Bitte Taste druecken");
+        break;
       case WORM_GAME_QUIT:
         // User must have typed 'q' for quit
         showDialog("Sie haben die aktuelle Runde abgebrochen!", "Bitte Taste druecken");

@@ -52,16 +52,22 @@ void showWorm(struct board* aboard, struct worm* aworm) {
     // Update whole worm
     // Get tailIndex
     int tailIndex = (aworm->headindex+1) % (aworm->cur_lastindex+1);
-    for(int i = 0; i <= aworm->cur_lastindex; i++){
+    for(int i = 0; i <= aworm->cur_lastindex; i++){ 
+      /*if(getContentAt(aboard, aworm->wormpos[i]) != BC_USED_BY_WORM){
+        break;
+      }*/
+      if(aworm->wormpos[i].y == -1 && aworm->wormpos[i].x == -1){
+        break;
+      }
       if(i == aworm->headindex){
         placeItem(aboard, aworm->wormpos[i].y, aworm->wormpos[i].x, BC_USED_BY_WORM, SYMBOL_WORM_HEAD_ELEMENT, aworm->wcolor);
+        continue;
       }
-      /*else if(i == tailIndex){
+      else if(i == tailIndex){
         placeItem(aboard, aworm->wormpos[i].y, aworm->wormpos[i].x, BC_USED_BY_WORM, SYMBOL_WORM_TAIL_ELEMENT, aworm->wcolor);
-      }*/
-      else if(getContentAt(aboard, aworm->wormpos[i]) == BC_USED_BY_WORM){
-        placeItem(aboard, aworm->wormpos[i].y, aworm->wormpos[i].x, BC_USED_BY_WORM, SYMBOL_WORM_INNER_ELEMENT, aworm->wcolor);
+        continue;
       }
+      placeItem(aboard, aworm->wormpos[i].y, aworm->wormpos[i].x, BC_USED_BY_WORM, SYMBOL_WORM_INNER_ELEMENT, aworm->wcolor);
     }
 }
 
