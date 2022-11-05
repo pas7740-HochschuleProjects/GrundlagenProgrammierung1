@@ -1,0 +1,10 @@
+New in this version
+- board automatically adapts to size of window
+  The array of cells is allocated dynamically.
+
+  Therefore the playground for the worm is as large as the real terminal window.
+  The board is no longer terminated to the right by a solid barrier.
+  However, the boards contents (barriers and food) is still fixed.
+
+- intro of command line options
+
