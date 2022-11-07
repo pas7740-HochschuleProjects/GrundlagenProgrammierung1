@@ -129,11 +129,6 @@ enum ResCodes initializeLevel(struct board* aboard){
     attroff(COLOR_PAIR(COLP_BARRIER));
   }
 
-  // Draw a line to signal the rightmost column of the board.
-  for(y=0; y <= aboard->last_row; y++){
-    placeItem(aboard, y, aboard->last_col, BC_BARRIER, SYMBOL_BARRIER, COLP_BARRIER);
-  }
-
   // Barriers: use a loop
   for(y=aboard->last_row/2; y <= aboard->last_row/2+10; y++){
     placeItem(aboard, y, aboard->last_col/3, BC_BARRIER, SYMBOL_BARRIER, COLP_BARRIER);

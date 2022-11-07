@@ -16,6 +16,7 @@ HEADERS += worm.h
 HEADERS += messages.h
 HEADERS += worm_model.h
 HEADERS += board_model.h
+HEADERS += options.h
 
 # Please add all object files in ./ here
 OBJECTS += prep.o
@@ -23,6 +24,7 @@ OBJECTS += worm.o
 OBJECTS += messages.o
 OBJECTS += worm_model.o
 OBJECTS += board_model.o
+OBJECTS += options.o
 
 # Please add THE target in ./bin here
 TARGET += $(BIN_DIR)/worm
