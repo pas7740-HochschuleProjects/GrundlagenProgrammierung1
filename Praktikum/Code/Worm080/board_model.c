@@ -50,6 +50,9 @@ int getNumberOfFoodItems(struct board* aboard){
 
 // Get Content of specific position
 enum BoardCodes getContentAt(struct board* aboard, struct pos position){
+  if(position.x == -1 && position.y == -1){
+    return BC_FREE_CELL;
+  }
   return aboard->cells[position.y][position.x];
 }
 
@@ -66,6 +69,11 @@ void decrementNumberOfFoodItems(struct board* aboard){
 
 // Init Board
 enum ResCodes initializeBoard(struct board* aboard){
+  // Maximal index of a row, reserve space for message area
+  aboard->last_row = LINES - ROWS_RESERVED - 1;
+  // Maximal index of a column
+  aboard->last_col = COLS - 1;
+  
   //Check dimensions of the board
   if(COLS < MIN_NUMBER_OF_COLS || LINES < MIN_NUMBER_OF_ROWS + ROWS_RESERVED){
     char buff[100];
@@ -73,12 +81,31 @@ enum ResCodes initializeBoard(struct board* aboard){
     showDialog(buff, "Bitte eine Taste druecken");
     return RES_FAILED;
   }
-
-  //Maximal index of a row
-  aboard->last_row = MIN_NUMBER_OF_ROWS-1;
-  aboard->last_col = MIN_NUMBER_OF_COLS-1;
   
+  // Allocate memory for 2-dimensional array of cells
+  // Alloc array of rows
+  aboard->cells = malloc(LINES*sizeof(enum BoardCode*));
+  if(aboard->cells == NULL){
+    showDialog("Abbruch: Zu wenig Speicher", "Bitte eine Taste druecken");
+    exit(RES_FAILED);
+  }
+
+  for(int y = 0; y < LINES; y++){
+    aboard->cells[y] = malloc(COLS*sizeof(int));
+    if(aboard->cells[y] == NULL){
+      showDialog("Abbruch: Zu wenig Speicher", "Bitte eine Taste druecken");
+      exit(RES_FAILED);
+    }
+  }
+
   return RES_OK;
+}
+
+void cleanupBoard(struct board* aboard){
+  for(int y = 0; y < LINES; y++){
+    free(aboard->cells[y]);
+  }
+  free(aboard->cells);
 }
 
 // Init Level

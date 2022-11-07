@@ -53,9 +53,6 @@ void showWorm(struct board* aboard, struct worm* aworm) {
     // Get tailIndex
     int tailIndex = (aworm->headindex+1) % (aworm->cur_lastindex+1);
     for(int i = 0; i <= aworm->cur_lastindex; i++){ 
-      /*if(getContentAt(aboard, aworm->wormpos[i]) != BC_USED_BY_WORM){
-        break;
-      }*/
       if(aworm->wormpos[i].y == -1 && aworm->wormpos[i].x == -1){
         break;
       }

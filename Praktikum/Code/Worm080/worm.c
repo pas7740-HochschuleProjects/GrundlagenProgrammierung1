@@ -198,6 +198,9 @@ enum ResCodes doLevel() {
         //This should never happen.
         res_code = RES_INTERNAL_ERROR;
     }
+    
+    // Cleanup Board
+    cleanupBoard(&theboard);
 
     // Normal exit point
     return res_code;
