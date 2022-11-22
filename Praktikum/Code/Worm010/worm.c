@@ -27,7 +27,7 @@ enum ResCodes{
 };
 
 // Dimensions and bounds
-#define NAP_TIME    100   // Time in milliseconds to sleep between updates of display
+#define NAP_TIME  100   // Time in milliseconds to sleep between updates of display
 #define MIN_NUMBER_OF_ROWS  3   // The guaranteed number of rows available for the board
 #define MIN_NUMBER_OF_COLS 10   // The guaranteed number of columns available for the board
 
@@ -35,6 +35,7 @@ enum ResCodes{
 enum ColorPairs{
   COLP_USER_WORM = 1,
 };
+
 // Symbols to display
 #define SYMBOL_WORM_INNER_ELEMENT '0'
 
@@ -250,7 +251,7 @@ void cleanupCursesApp(void)
 // Place an item onto the curses display.
 void placeItem(int y, int x, chtype symbol, enum ColorPairs color_pair) {
 
-    //  Store item on the display (symbol code)
+    // Store item on the display (symbol code)
     move(y, x);                         // Move cursor to (y,x)
     attron(COLOR_PAIR(color_pair));     // Start writing in selected color
     addch(symbol);                      // Store symbol on the virtual display
@@ -312,13 +313,17 @@ void moveWorm(enum GameStates* agame_state) {
     // We are not allowed to leave the display's window.
     if (theworm_headpos_x < 0) {
         *agame_state = WORM_OUT_OF_BOUNDS;
-    } else if (theworm_headpos_x > getLastCol() ) { 
+    }
+    else if (theworm_headpos_x > getLastCol() ) { 
         *agame_state = WORM_OUT_OF_BOUNDS;
-    } else if (theworm_headpos_y < 0) {  
+    }
+    else if (theworm_headpos_y < 0) {  
         *agame_state = WORM_OUT_OF_BOUNDS;
-    } else if (theworm_headpos_y > getLastRow() ) {
+    }
+    else if (theworm_headpos_y > getLastRow() ) {
         *agame_state = WORM_OUT_OF_BOUNDS;
-    } else {
+    }
+    else {
         // We will stay within bounds.
         // So all is well
         // Do nothing
@@ -355,7 +360,7 @@ void setWormHeading(enum WormHeading dir) {
 // ********************************************************************************************
 
 int main(void) {
-    enum ResCodes res_code;         // Result code from functions
+    int res_code;         // Result code from functions
 
     // Here we start
     initializeCursesApplication();  // Init various settings of our application
