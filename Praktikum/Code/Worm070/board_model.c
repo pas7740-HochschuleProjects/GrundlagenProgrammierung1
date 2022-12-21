@@ -85,6 +85,10 @@ enum ResCodes initializeBoard(struct board* aboard){
 enum ResCodes initializeLevel(struct board* aboard){
   int y, x;
   
+  // Init time
+  //time_t t;
+  //srand((unsigned) &t);
+
   // Fill board and screen buffer with empty cells.
   for(y=0; y <= aboard->last_row; y++){
     for(x=0; x <= aboard->last_col; x++){

@@ -39,12 +39,12 @@ enum ResCodes doLevel();
 void initializeColors() {
     // Define colors of the game
     start_color();
-    init_pair(COLP_USER_WORM,     COLOR_GREEN,    COLOR_BLACK);
+    init_pair(COLP_USER_WORM,     COLOR_CYAN,    COLOR_BLACK);
     init_pair(COLP_FREE_CELL,     COLOR_BLACK,    COLOR_BLACK);
-    init_pair(COLP_BARRIER,       COLOR_RED,      COLOR_BLACK);
-    init_pair(COLP_FOOD_1,        COLOR_YELLOW,   COLOR_BLACK);
-    init_pair(COLP_FOOD_2,        COLOR_MAGENTA,  COLOR_BLACK);
-    init_pair(COLP_FOOD_3,        COLOR_CYAN,     COLOR_BLACK);
+    init_pair(COLP_BARRIER,       COLOR_WHITE,      COLOR_BLACK);
+    init_pair(COLP_FOOD_1,        COLOR_MAGENTA,   COLOR_BLACK);
+    init_pair(COLP_FOOD_2,        COLOR_YELLOW,  COLOR_BLACK);
+    init_pair(COLP_FOOD_3,        COLOR_RED,     COLOR_BLACK);
 }
 
 void readUserInput(struct worm* aworm, enum GameStates* agame_state ) {
